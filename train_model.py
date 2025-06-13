@@ -28,7 +28,15 @@ scaler = StandardScaler()
 x_train_scaled = scaler.fit_transform(x_train)
 x_test_scaled = scaler.transform(x_test)
 
-model = LogisticRegression(max_iter=1000,class_weight='balanced')  # Initialize the model, using Logistic Regression with a maximum of 1000 iterations
+#model = LogisticRegression(max_iter=1000,class_weight='balanced')  # Initialize the model, using Logistic Regression with a maximum of 1000 iterations
+model = RandomForestClassifier(
+    n_estimators=200,
+    max_depth=10,
+    class_weight='balanced_subsample',
+    random_state=42
+)
+
+
 model.fit(x_train_scaled, y_train)  # Train the model using the training data
 
 y_pred = model.predict(x_test_scaled)  # Make predictions on the test data
@@ -37,6 +45,9 @@ y_pred = model.predict(x_test_scaled)  # Make predictions on the test data
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 print("Classification Report:\n", classification_report(y_test, y_pred))
+
+joblib.dump(model, 'saved_Model/attrition_model.pkl')  # Save the trained model to a file
+joblib.dump(scaler, 'saved_Model/scaler.pkl')  # Save the scaler to a file
 
 # print(df.columns)
 # print(df.head())
