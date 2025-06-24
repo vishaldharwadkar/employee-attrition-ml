@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 import joblib
 
 df = pd.read_csv('archive/WA_Fn-UseC_-HR-Employee-Attrition.csv')
-#df.drop(columns=['EmployeeNumber', 'EmployeeCount', 'Over18', 'StandardHours'], inplace=True)
+df.drop(columns=['EmployeeNumber', 'EmployeeCount', 'Over18', 'StandardHours'], inplace=True)
 # intead of columns=[] I can use axis=1 which means columns and axis=0 means rows
 
 le = LabelEncoder()
@@ -40,6 +40,12 @@ model = RandomForestClassifier(
 model.fit(x_train_scaled, y_train)  # Train the model using the training data
 
 y_pred = model.predict(x_test_scaled)  # Make predictions on the test data
+
+# After training and scaling
+feature_names = x.columns.tolist()
+
+# Save feature names
+joblib.dump(feature_names, "saved_Model/feature_names.pkl")
 
 # Print evaluation metrics
 print("Accuracy:", accuracy_score(y_test, y_pred))
