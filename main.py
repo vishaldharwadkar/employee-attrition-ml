@@ -2,12 +2,21 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import pandas as pd
+from fastapi.middleware.cors import CORSMiddleware
 
 model = joblib.load('saved_Model/attrition_model.pkl')
 scaler = joblib.load('saved_Model/scaler.pkl')
 feature_names = joblib.load("saved_Model/feature_names.pkl")
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # React frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class EmployeeData(BaseModel):
     Age: float
